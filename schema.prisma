@@ -1,0 +1,130 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../node_modules/.prisma/client"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  role      Role     @default(USER)
+  password  String?
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  bookings  Booking[]
+  messages  Message[]
+
+  @@map("users")
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+model MehndiDesign {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  category    Category @default(TRADITIONAL)
+  imageUrl    String   @map("image_url")
+  thumbnailUrl String? @map("thumbnail_url")
+  price       Decimal? @db.Decimal(10, 2)
+  duration    Int?
+  isActive    Boolean  @default(true) @map("is_active")
+  featured    Boolean  @default(false)
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@map("mehndi_designs")
+}
+
+enum Category {
+  TRADITIONAL
+  ARABIC
+  BRIDAL
+  MODERN
+  MINIMAL
+  FESTIVE
+  KIDS
+}
+
+model Testimonial {
+  id        String   @id @default(cuid())
+  name      String
+  email     String?
+  rating    Int      @default(5)
+  comment   String   @db.Text
+  imageUrl  String?  @map("image_url")
+  isActive  Boolean  @default(true) @map("is_active")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("testimonials")
+}
+
+model Booking {
+  id          String        @id @default(cuid())
+  userId      String?       @map("user_id")
+  name        String
+  email       String
+  phone       String
+  eventType   EventType     @map("event_type")
+  eventDate   DateTime      @map("event_date")
+  designIds   String[]      @map("design_ids")
+  message     String?       @db.Text
+  status      BookingStatus @default(PENDING)
+  totalPrice  Decimal?      @db.Decimal(10, 2) @map("total_price")
+  createdAt   DateTime      @default(now()) @map("created_at")
+  updatedAt   DateTime      @updatedAt @map("updated_at")
+
+  user User? @relation(fields: [userId], references: [id])
+
+  @@map("bookings")
+}
+
+enum EventType {
+  WEDDING
+  ENGAGEMENT
+  FESTIVAL
+  PARTY
+  CORPORATE
+  OTHER
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  COMPLETED
+  CANCELLED
+}
+
+model Message {
+  id        String   @id @default(cuid())
+  userId    String?  @map("user_id")
+  name      String
+  email     String
+  phone     String?
+  subject   String?
+  content   String   @db.Text
+  isRead    Boolean  @default(false) @map("is_read")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user User? @relation(fields: [userId], references: [id])
+
+  @@map("messages")
+}
+
+model SiteConfig {
+  id          String  @id @default(cuid())
+  key         String  @unique
+  value       String  @db.Text
+  description String?
+
+  @@map("site_config")
+}
