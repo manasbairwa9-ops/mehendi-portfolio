@@ -1,30 +1,26 @@
-import { ContactForm } from "@/components/contact/contact-form";
-import { ContactInfo } from "@/components/contact/contact-info";
+import { GalleryGrid } from "@/components/gallery/gallery-grid";
+import { GalleryFilters } from "@/components/gallery/gallery-filters";
 
 export const metadata = {
-  title: "Contact Us | Mehndi Artistry",
-  description: "Get in touch with our mehndi artist for bookings, inquiries, and custom design requests.",
+  title: "Design Gallery | Mehndi Artistry",
+  description: "Browse our collection of stunning mehndi designs - bridal, Arabic, modern, minimal, and festive styles.",
 };
 
-export default function ContactPage() {
+export default function GalleryPage() {
   return (
     <div className="min-h-screen pt-20 pb-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <h1 className="text-4xl md:text-5xl font-serif font-bold text-mehndi-dark mb-4">
-            Get in Touch
+            Our Design Gallery
           </h1>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Have questions or want to discuss a custom design? We would love to hear from you.
+            Explore our diverse collection of handcrafted mehndi designs, each telling a unique story through intricate patterns.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-          <ContactInfo />
-          <div className="bg-white rounded-2xl shadow-xl p-8">
-            <ContactForm />
-          </div>
-        </div>
+        <GalleryFilters />
+        <GalleryGrid />
       </div>
     </div>
   );
